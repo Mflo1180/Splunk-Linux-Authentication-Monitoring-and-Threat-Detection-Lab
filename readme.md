@@ -73,3 +73,4 @@ index=security "Failed password" | rex "from (?<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+
 - Successfully ingested Linux authentication logs
 - Detected failed SSH login attempts
 - Identified repeated attack patterns
+
