@@ -2,15 +2,15 @@
 
 ## Overview
 
-This project focused on building a basic SIEM workflow using Splunk to monitor and investigate Linux authentication activity on an Ubuntu virtual machine.
+This project demonstrates how to monitor and analyze Linux authentication logs using Splunk in a virtualized lab environment.
 
 ---
 
 ## Objectives
 
 - Monitor `/var/log/auth.log`
-- Detect failed logins
-- Identify brute-force attempts
+- Detect failed login attempts
+- Identify brute-force behavior
 
 ---
 
@@ -18,15 +18,17 @@ This project focused on building a basic SIEM workflow using Splunk to monitor a
 
 ### 1. Splunk Installation
 
-Splunk Enterprise was installed on the Ubuntu VM.
+Splunk Enterprise was installed on the Ubuntu virtual machine and verified through the web interface.
 
 ---
 
 ### 2. Log Ingestion
 
-Monitoring file: `/var/log/auth.log`
+Configured Splunk to monitor:
 
-This file includes:
+/var/log/auth.log
+
+This file contains:
 - SSH login attempts
 - Failed passwords
 - su authentication failures
@@ -36,25 +38,38 @@ This file includes:
 
 ### 3. Security Index
 
-Created index: `security`
+Created a dedicated index:
+
+security
 
 Example search:
-
-```spl
 index=security
-```
-4. Failed SSH Detection
+
+---
+
+### 4. Failed SSH Detection
+
+Search used:
 index=security "Failed password"
-5. Extract Source IP
-index=security "Failed password"
-| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
-| stats count by src_ip
-6. Brute Force Pattern
-index=security "Failed password"
-| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
-| bucket _time span=1m
-| stats count by _time, src_ip
-Key Takeaways
-Successfully ingested Linux auth logs
-Detected failed SSH attempts
-Identified repeated attack patterns
+
+---
+
+### 5. Source IP Extraction
+
+Search used:
+index=security "Failed password" | rex "from (?<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+)" | stats count by src_ip
+
+---
+
+### 6. Brute Force Detection
+
+Search used:
+index=security "Failed password" | rex "from (?<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+)" | bucket _time span=1m | stats count by _time, src_ip
+
+---
+
+## Key Takeaways
+
+- Successfully ingested Linux authentication logs
+- Detected failed SSH login attempts
+- Identified repeated attack patterns
