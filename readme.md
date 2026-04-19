@@ -2,7 +2,11 @@
 
 ## Overview
 
-This project focused on building a basic SIEM workflow using Splunk to monitor and investigate Linux authentication activity on an Ubuntu virtual machine. The lab began with log ingestion and index creation, then progressed into detecting local authentication failures and externally generated SSH login attempts. The final outcome was a working Splunk monitoring pipeline capable of identifying repeated failed login behavior and highlighting patterns consistent with brute-force activity.
+This project focused on building a basic SIEM workflow using Splunk to monitor and investigate Linux authentication activity on an Ubuntu virtual machine.
+
+The lab began with log ingestion and index creation, then progressed into detecting local authentication failures and externally generated SSH login attempts. The final outcome was a working Splunk monitoring pipeline capable of identifying repeated failed login behavior and highlighting patterns consistent with brute-force activity.
+
+---
 
 ## Objectives
 
@@ -12,6 +16,8 @@ This project focused on building a basic SIEM workflow using Splunk to monitor a
 - Detect failed local privilege escalation attempts
 - Simulate failed SSH login attempts from an external host
 - Build Splunk searches to identify repeated failed login behavior and potential brute-force activity
+
+---
 
 ## Lab Environment
 
@@ -23,13 +29,17 @@ This project focused on building a basic SIEM workflow using Splunk to monitor a
 - **Custom index:** `security`
 - **Source type:** `linux_auth`
 
+---
+
 ## Project Workflow
 
 ### 1. Splunk Installation and Initial Configuration
 
-Splunk Enterprise was installed locally on the Ubuntu VM. During setup, I configured the platform to run properly in the lab environment and verified access through the local web interface.
+Splunk Enterprise was installed locally on the Ubuntu VM.
 
-This established the core SIEM environment needed for the rest of the project.
+During setup, I configured the platform to run properly in the lab environment and verified access through the local web interface. This established the core SIEM environment needed for the rest of the project.
+
+---
 
 ### 2. Log Ingestion Setup
 
@@ -54,7 +64,9 @@ Instead of using the default index, I created a dedicated index named:
 
 security
 
-This made the lab more realistic and organized by separating authentication events from unrelated data. It also allowed more targeted searches such as:
+This made the lab more realistic and organized by separating authentication events from unrelated data.
+
+It also allowed more targeted searches such as:
 
 index=security
 
@@ -62,7 +74,9 @@ This phase demonstrated how Splunk stores ingested log data in an organized, sea
 
 4. Verification of Ingested Authentication Logs
 
-After ingestion was configured, I verified that authentication events were appearing in Splunk. This confirmed that:
+After ingestion was configured, I verified that authentication events were appearing in Splunk.
+
+This confirmed that:
 
 Splunk was monitoring the correct file
 the data source was active
@@ -84,13 +98,15 @@ PAM authentication failures
 local privilege escalation attempts that did not succeed
 6. SSH Service Enablement
 
-To expand the lab into a more realistic external access scenario, I installed and enabled the OpenSSH server on the Ubuntu VM. I then verified that the service was running and listening on port 22.
+To expand the lab into a more realistic external access scenario, I installed and enabled the OpenSSH server on the Ubuntu VM.
 
-This allowed the VM to accept remote SSH login attempts from the Windows host.
+I then verified that the service was running and listening on port 22. This allowed the VM to accept remote SSH login attempts from the Windows host.
 
 7. Network Configuration and Host-to-VM Connectivity
 
-To simulate external login attempts, the VM network configuration was adjusted so that the Windows host could communicate with the Ubuntu VM directly. I verified:
+To simulate external login attempts, the VM network configuration was adjusted so that the Windows host could communicate with the Ubuntu VM directly.
+
+I verified:
 
 the VM’s active IP address
 connectivity between the host and VM
@@ -100,7 +116,9 @@ This phase was important because it turned the VM into an actual network target 
 
 8. Simulated Failed SSH Login Attempts
 
-From the Windows host, I used SSH to connect to the Ubuntu VM with an invalid username and intentionally entered the wrong password multiple times. This generated repeated failed authentication events in /var/log/auth.log.
+From the Windows host, I used SSH to connect to the Ubuntu VM with an invalid username and intentionally entered the wrong password multiple times.
+
+This generated repeated failed authentication events in /var/log/auth.log.
 
 Example attack pattern:
 
@@ -181,7 +199,9 @@ detecting both local and remote authentication failures
 extracting relevant details from raw logs
 converting repeated failed login activity into a simple detection use case
 
-The most important part of the project was the progression from raw events to actual detection logic. Instead of stopping at "logs are visible," the lab moved into identifying suspicious activity patterns and attributing them to a specific source IP.
+The most important part of the project was the progression from raw events to actual detection logic.
+
+Instead of stopping at "logs are visible," the lab moved into identifying suspicious activity patterns and attributing them to a specific source IP.
 
 Challenges Encountered
 Splunk startup behavior after reboots required troubleshooting
@@ -193,7 +213,9 @@ Working through those issues improved the realism of the project and reinforced 
 
 Conclusion
 
-This project successfully built a basic Splunk-based authentication monitoring lab on Ubuntu and used it to detect suspicious login activity. By ingesting auth.log, creating a dedicated security index, simulating both local and remote authentication failures, and building searches to identify repeated failed SSH attempts, the lab demonstrated a practical SIEM workflow that closely reflects entry-level security monitoring tasks.
+This project successfully built a basic Splunk-based authentication monitoring lab on Ubuntu and used it to detect suspicious login activity.
+
+By ingesting auth.log, creating a dedicated security index, simulating both local and remote authentication failures, and building searches to identify repeated failed SSH attempts, the lab demonstrated a practical SIEM workflow that closely reflects entry-level security monitoring tasks.
 
 Screenshot Section
 
