@@ -43,28 +43,23 @@ During setup, I configured the platform to run properly in the lab environment a
 
 ### 2. Log Ingestion Setup
 
-I configured Splunk to continuously monitor the Linux authentication log:
+I configured Splunk to continuously monitor the Linux authentication log: `/var/log/auth.log`
 
-```text
-/var/log/auth.log
-```
 This file contains security-relevant authentication activity such as:
 
-SSH login attempts
-Failed password attempts
-su authentication failures
-Session open and close activity
-Privilege-related PAM events
+- SSH login attempts
+- Failed password attempts
+- `su` authentication failures
+- Session open and close activity
+- Privilege-related PAM events
 
 I selected continuous monitoring rather than one-time ingestion so that new events would be searchable as soon as they were written to the log.
 
+---
+
 ### 3. Custom Security Index Creation
 
-Instead of using the default index, I created a dedicated index named:
-
-```text
-security
-```
+Instead of using the default index, I created a dedicated index named `security`.
 
 This made the lab more realistic and organized by separating authentication events from unrelated data.
 
@@ -72,7 +67,6 @@ It also allowed more targeted searches such as:
 
 ```spl
 index=security
-```
 
 This phase demonstrated how Splunk stores ingested log data in an organized, searchable structure rather than simply reading directly from the raw file each time.
 
@@ -135,58 +129,32 @@ This was the core attack simulation used for the remainder of the project.
 
 Splunk Searches Used
 Raw Failed SSH Detection
-
-This search identified failed SSH login attempts:
-
 index=security "Failed password"
 
 This was the simplest proof that Splunk was correctly ingesting and surfacing failed SSH events.
 
 Structured View of Failed SSH Events
-
-This search displayed the key event metadata in a cleaner format:
-
 index=security "Failed password"
 | table _time host source sourcetype
 
 This made it easier to verify when the events occurred, which host generated them, and which log file they came from.
 
 Extracting Source IP and Counting Attempts
-
-To identify the attacking source, I used the following search:
-
 index=security "Failed password"
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
 | stats count by src_ip
 | sort - count
 
-What this search does:
-
-Filters for failed SSH password events
-Extracts the attacker IP from the raw event text
-Counts failed attempts by source IP
-Sorts the results from highest to lowest count
-
-This search turned raw log entries into a basic brute-force detection view.
+This search filters failed SSH password events, extracts the attacker IP, counts attempts by source IP, and sorts the results from highest to lowest count.
 
 Pattern Over Time
-
-To show the behavior over time rather than just total attempts, I used:
-
 index=security "Failed password"
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
 | bucket _time span=1m
 | stats count by _time, src_ip
 | sort _time
 
-What this search does:
-
-Extracts the attacker IP
-Groups events into one-minute time windows
-Counts attempts per time window per source IP
-Shows the pattern in chronological order
-
-This made it possible to demonstrate repeated failed attempts occurring in a short time span, which is more indicative of brute-force behavior than a single isolated failure.
+This search groups repeated attempts into one-minute windows to show a brute-force pattern over time.
 
 Findings
 Splunk successfully ingested Linux authentication logs from /var/log/auth.log
@@ -198,9 +166,7 @@ Repeated failed SSH attempts from the same IP could be grouped and counted
 Time-based grouping showed a repeated attack pattern over short intervals
 Key Takeaways
 
-This project demonstrated more than just installing Splunk.
-
-It showed an end-to-end security monitoring workflow:
+This project demonstrated an end-to-end security monitoring workflow:
 
 Collecting log data from a Linux system
 Organizing data in a dedicated index
@@ -209,16 +175,13 @@ Detecting both local and remote authentication failures
 Extracting relevant details from raw logs
 Converting repeated failed login activity into a simple detection use case
 
-The most important part of the project was the progression from raw events to actual detection logic. Instead of stopping at “logs are visible,” the lab moved into identifying suspicious activity patterns and attributing them to a specific source IP.
+The most important part of the project was the progression from raw events to actual detection logic.
 
 Challenges Encountered
 Splunk startup behavior after reboots required troubleshooting
 Index visibility briefly caused confusion because of pagination and search context
 Some searches required refinement because not all useful fields were automatically extracted
 Network configuration had to be adjusted so that the Windows host could reach the Ubuntu VM over SSH
-
-Working through those issues improved the realism of the project and reinforced troubleshooting skills in Linux, VirtualBox, networking, and Splunk search logic.
-
 Conclusion
 
 This project successfully built a basic Splunk-based authentication monitoring lab on Ubuntu and used it to detect suspicious login activity.
