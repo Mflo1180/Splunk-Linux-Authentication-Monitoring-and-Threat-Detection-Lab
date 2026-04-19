@@ -1,33 +1,41 @@
-Overview
+# Splunk Linux Authentication Monitoring and Threat Detection Lab
+
+## Overview
 
 This project focused on building a basic SIEM workflow using Splunk to monitor and investigate Linux authentication activity on an Ubuntu virtual machine. The lab began with log ingestion and index creation, then progressed into detecting local authentication failures and externally generated SSH login attempts. The final outcome was a working Splunk monitoring pipeline capable of identifying repeated failed login behavior and highlighting patterns consistent with brute-force activity.
 
-Objectives
-Install and configure Splunk Enterprise on an Ubuntu virtual machine
-Ingest Linux authentication logs from /var/log/auth.log
-Store security events in a dedicated Splunk index
-Detect failed local privilege escalation attempts
-Simulate failed SSH login attempts from an external host
-Build Splunk searches to identify repeated failed login behavior and potential brute-force activity
-Lab Environment
-Host system: Windows PC
-Virtualization platform: Oracle VirtualBox
-Guest system: Ubuntu
-SIEM platform: Splunk Enterprise
-Log source: /var/log/auth.log
-Custom index: security
-Source type: linux_auth
-Project Workflow
-1. Splunk Installation and Initial Configuration
+## Objectives
 
-Splunk Enterprise was installed locally on the Ubuntu VM. During setup, I configured the platform to run properly under the lab user context and verified access through the local web interface.
+- Install and configure Splunk Enterprise on an Ubuntu virtual machine
+- Ingest Linux authentication logs from `/var/log/auth.log`
+- Store security events in a dedicated Splunk index
+- Detect failed local privilege escalation attempts
+- Simulate failed SSH login attempts from an external host
+- Build Splunk searches to identify repeated failed login behavior and potential brute-force activity
+
+## Lab Environment
+
+- **Host system:** Windows PC
+- **Virtualization platform:** Oracle VirtualBox
+- **Guest system:** Ubuntu
+- **SIEM platform:** Splunk Enterprise
+- **Log source:** `/var/log/auth.log`
+- **Custom index:** `security`
+- **Source type:** `linux_auth`
+
+## Project Workflow
+
+### 1. Splunk Installation and Initial Configuration
+
+Splunk Enterprise was installed locally on the Ubuntu VM. During setup, I configured the platform to run properly in the lab environment and verified access through the local web interface.
 
 This established the core SIEM environment needed for the rest of the project.
 
-2. Log Ingestion Setup
+### 2. Log Ingestion Setup
 
 I configured Splunk to continuously monitor the Linux authentication log:
 
+```text
 /var/log/auth.log
 
 This file contains security-relevant authentication activity such as:
@@ -35,14 +43,14 @@ This file contains security-relevant authentication activity such as:
 SSH login attempts
 failed password attempts
 su authentication failures
-session open/close activity
+session open and close activity
 privilege-related PAM events
 
 I selected continuous monitoring rather than one-time ingestion so that new events would be searchable as soon as they were written to the log.
 
 3. Custom Security Index Creation
 
-Instead of using a default index, I created a dedicated index named:
+Instead of using the default index, I created a dedicated index named:
 
 security
 
@@ -155,9 +163,6 @@ Shows the pattern in chronological order
 This made it possible to demonstrate repeated failed attempts occurring in a short time span, which is more indicative of brute-force behavior than a single isolated failure.
 
 Findings
-
-This lab produced several important results:
-
 Splunk successfully ingested Linux authentication logs from /var/log/auth.log
 A dedicated security index was created and used for focused security searches
 Local su failures were detectable through Splunk searches
@@ -176,12 +181,9 @@ detecting both local and remote authentication failures
 extracting relevant details from raw logs
 converting repeated failed login activity into a simple detection use case
 
-The most important part of the project was the progression from raw events to actual detection logic. Instead of stopping at “logs are visible,” the lab moved into identifying suspicious activity patterns and attributing them to a specific source IP.
+The most important part of the project was the progression from raw events to actual detection logic. Instead of stopping at "logs are visible," the lab moved into identifying suspicious activity patterns and attributing them to a specific source IP.
 
 Challenges Encountered
-
-A few issues came up during the lab:
-
 Splunk startup behavior after reboots required troubleshooting
 index visibility briefly caused confusion because of pagination and search context
 some searches required refinement because not all useful fields were automatically extracted
