@@ -58,17 +58,21 @@ Privilege-related PAM events
 
 I selected continuous monitoring rather than one-time ingestion so that new events would be searchable as soon as they were written to the log.
 
-3. Custom Security Index Creation
+### 3. Custom Security Index Creation
 
 Instead of using the default index, I created a dedicated index named:
 
+```text
 security
+```
 
 This made the lab more realistic and organized by separating authentication events from unrelated data.
 
 It also allowed more targeted searches such as:
 
+```spl
 index=security
+```
 
 This phase demonstrated how Splunk stores ingested log data in an organized, searchable structure rather than simply reading directly from the raw file each time.
 
