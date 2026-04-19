@@ -47,7 +47,7 @@ I configured Splunk to continuously monitor the Linux authentication log:
 
 ```text
 /var/log/auth.log
-
+```
 This file contains security-relevant authentication activity such as:
 
 SSH login attempts
