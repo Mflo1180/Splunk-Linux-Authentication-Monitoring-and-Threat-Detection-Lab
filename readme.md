@@ -36,6 +36,12 @@ This file contains:
 
 ---
 
+### Attack Simulation
+
+From the Windows host, I initiated multiple failed SSH login attempts against the Ubuntu VM using invalid credentials. This generated repeated authentication failures in `/var/log/auth.log`, which were then ingested into Splunk for analysis.
+
+---
+
 ### 3. Security Index
 
 Created a dedicated index:
@@ -66,6 +72,8 @@ index=security "Failed password" | rex "from (?<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+
 Search used:
 index=security "Failed password" | rex "from (?<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+)" | bucket _time span=1m | stats count by _time, src_ip
 
+This pattern indicates potential brute-force behavior, where repeated failed login attempts occur within a short time window from the same source.
+
 ---
 
 ## Key Takeaways
@@ -74,3 +82,6 @@ index=security "Failed password" | rex "from (?<src_ip>\\d+\\.\\d+\\.\\d+\\.\\d+
 - Detected failed SSH login attempts
 - Identified repeated attack patterns
 
+---
+
+## Screenshots
