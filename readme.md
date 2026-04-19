@@ -42,6 +42,7 @@ Example search:
 
 ```spl
 index=security
+```
 4. Failed SSH Detection
 index=security "Failed password"
 5. Extract Source IP
