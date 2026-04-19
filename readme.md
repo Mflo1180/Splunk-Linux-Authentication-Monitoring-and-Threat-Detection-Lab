@@ -51,10 +51,10 @@ I configured Splunk to continuously monitor the Linux authentication log:
 This file contains security-relevant authentication activity such as:
 
 SSH login attempts
-failed password attempts
+Failed password attempts
 su authentication failures
-session open and close activity
-privilege-related PAM events
+Session open and close activity
+Privilege-related PAM events
 
 I selected continuous monitoring rather than one-time ingestion so that new events would be searchable as soon as they were written to the log.
 
@@ -79,9 +79,9 @@ After ingestion was configured, I verified that authentication events were appea
 This confirmed that:
 
 Splunk was monitoring the correct file
-the data source was active
-the custom index was functioning properly
-the linux_auth sourcetype was being applied
+The data source was active
+The custom index was functioning properly
+The linux_auth sourcetype was being applied
 
 At this point, the lab had a working log pipeline from Ubuntu into Splunk.
 
@@ -93,9 +93,9 @@ I intentionally generated failed su attempts inside the Ubuntu VM and searched f
 
 This phase showed that the environment could detect:
 
-failed su activity
+Failed su activity
 PAM authentication failures
-local privilege escalation attempts that did not succeed
+Local privilege escalation attempts that did not succeed
 6. SSH Service Enablement
 
 To expand the lab into a more realistic external access scenario, I installed and enabled the OpenSSH server on the Ubuntu VM.
@@ -108,8 +108,8 @@ To simulate external login attempts, the VM network configuration was adjusted s
 
 I verified:
 
-the VM’s active IP address
-connectivity between the host and VM
+The VM’s active IP address
+Connectivity between the host and VM
 SSH service availability on the target system
 
 This phase was important because it turned the VM into an actual network target rather than only a local lab box.
@@ -122,10 +122,10 @@ This generated repeated failed authentication events in /var/log/auth.log.
 
 Example attack pattern:
 
-invalid user attempted over SSH
-repeated bad password submissions
-failure events logged by sshd
-external source IP visible in the logs
+Invalid user attempted over SSH
+Repeated bad password submissions
+Failure events logged by sshd
+External source IP visible in the logs
 
 This was the core attack simulation used for the remainder of the project.
 
@@ -155,7 +155,9 @@ index=security "Failed password"
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
 | stats count by src_ip
 | sort - count
-What this search does
+
+What this search does:
+
 Filters for failed SSH password events
 Extracts the attacker IP from the raw event text
 Counts failed attempts by source IP
@@ -172,7 +174,9 @@ index=security "Failed password"
 | bucket _time span=1m
 | stats count by _time, src_ip
 | sort _time
-What this search does
+
+What this search does:
+
 Extracts the attacker IP
 Groups events into one-minute time windows
 Counts attempts per time window per source IP
@@ -190,24 +194,24 @@ Repeated failed SSH attempts from the same IP could be grouped and counted
 Time-based grouping showed a repeated attack pattern over short intervals
 Key Takeaways
 
-This project demonstrated more than just installing Splunk. It showed an end-to-end security monitoring workflow:
+This project demonstrated more than just installing Splunk.
 
-collecting log data from a Linux system
-organizing data in a dedicated index
-validating ingestion and source configuration
-detecting both local and remote authentication failures
-extracting relevant details from raw logs
-converting repeated failed login activity into a simple detection use case
+It showed an end-to-end security monitoring workflow:
 
-The most important part of the project was the progression from raw events to actual detection logic.
+Collecting log data from a Linux system
+Organizing data in a dedicated index
+Validating ingestion and source configuration
+Detecting both local and remote authentication failures
+Extracting relevant details from raw logs
+Converting repeated failed login activity into a simple detection use case
 
-Instead of stopping at "logs are visible," the lab moved into identifying suspicious activity patterns and attributing them to a specific source IP.
+The most important part of the project was the progression from raw events to actual detection logic. Instead of stopping at “logs are visible,” the lab moved into identifying suspicious activity patterns and attributing them to a specific source IP.
 
 Challenges Encountered
 Splunk startup behavior after reboots required troubleshooting
-index visibility briefly caused confusion because of pagination and search context
-some searches required refinement because not all useful fields were automatically extracted
-network configuration had to be adjusted so that the Windows host could reach the Ubuntu VM over SSH
+Index visibility briefly caused confusion because of pagination and search context
+Some searches required refinement because not all useful fields were automatically extracted
+Network configuration had to be adjusted so that the Windows host could reach the Ubuntu VM over SSH
 
 Working through those issues improved the realism of the project and reinforced troubleshooting skills in Linux, VirtualBox, networking, and Splunk search logic.
 
@@ -222,25 +226,25 @@ Screenshot Section
 Add screenshots for the following stages:
 
 Splunk log source selection for /var/log/auth.log
-log monitoring configuration
-security index creation
-preview of authentication log events before ingestion
-successful ingestion of authentication logs
-failed local su / privilege escalation detection
-SSH service running on Ubuntu
-VM IP identification / network connectivity
-raw failed SSH events in Splunk
-structured failed SSH table view
-failed attempts grouped by source IP
-repeated failed attempts over time
+Log monitoring configuration
+Security index creation
+Preview of authentication log events before ingestion
+Successful ingestion of authentication logs
+Failed local su / privilege escalation detection
+SSH service running on Ubuntu VM
+IP identification / network connectivity
+Raw failed SSH events in Splunk
+Structured failed SSH table view
+Failed attempts grouped by source IP
+Repeated failed attempts over time
 Skills Demonstrated
 Splunk installation and configuration
 Linux log ingestion and monitoring
-custom index creation
-basic SPL query writing
-regex-based field extraction
-security event analysis
+Custom index creation
+Basic SPL query writing
+Regex-based field extraction
+Security event analysis
 Linux authentication log interpretation
 SSH service setup and testing
 VirtualBox network troubleshooting
-brute-force detection logic
+Brute-force detection logic
