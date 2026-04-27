@@ -232,7 +232,7 @@ Shows extraction of attacker IP addresses using regex and grouping by source.
 
 ### Brute Force Pattern
 
-![Brute Force](brute-force-detection.png)
+![Brute Force](brute-force-pattern.png)
 
 Illustrates repeated failed login attempts over time, indicating potential brute-force behavior.
 
