@@ -208,7 +208,7 @@ Confirms that events are being stored in the `security` index.
 
 ### Failed SSH Detection
 
-![Failed SSH](failed-ssh.png)
+![Failed SSH](ssh-attack-detected.png)
 
 Displays failed SSH login attempts using the search `index=security "Failed password"`.
 
