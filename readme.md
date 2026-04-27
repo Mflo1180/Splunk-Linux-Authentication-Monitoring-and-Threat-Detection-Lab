@@ -224,7 +224,7 @@ Provides a structured view of authentication events including timestamp, host, a
 
 ### Source IP Extraction
 
-![IP Extraction](brute-force-detection.png)
+![IP Extraction](source-ip-extraction.png)
 
 Shows extraction of attacker IP addresses using regex and grouping by source.
 
