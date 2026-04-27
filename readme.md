@@ -190,15 +190,51 @@ The most valuable part of the project was moving beyond simply ingesting logs an
 
 ## Screenshots
 
-Add screenshots for the following:
+### Log Ingestion
 
-1. Splunk monitoring `/var/log/auth.log`
-2. Security index creation
-3. Ingested authentication logs in Splunk
-4. Failed `su` authentication activity
-5. Failed SSH login attempts
-6. Source IP extraction results
-7. Brute-force pattern results over time
+![Log Ingestion](table-view.png)
+
+Shows Splunk ingesting authentication logs from `/var/log/auth.log`.
+
+---
+
+### Security Index Verification
+
+![Security Index](creating-security-index.png)
+
+Confirms that events are being stored in the `security` index.
+
+---
+
+### Failed SSH Detection
+
+![Failed SSH](failed-ssh.png)
+
+Displays failed SSH login attempts using the search `index=security "Failed password"`.
+
+---
+
+### Event Table View
+
+![Table View](table-view.png)
+
+Provides a structured view of authentication events including timestamp, host, and source.
+
+---
+
+### Source IP Extraction
+
+![IP Extraction](identify-network-and-IP.png)
+
+Shows extraction of attacker IP addresses using regex and grouping by source.
+
+---
+
+### Brute Force Pattern
+
+![Brute Force](brute-force-detection.png)
+
+Illustrates repeated failed login attempts over time, indicating potential brute-force behavior.
 
 ---
 
